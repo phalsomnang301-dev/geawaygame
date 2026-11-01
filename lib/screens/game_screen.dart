@@ -1,4 +1,3 @@
-
 import 'package:flutter_assiment/models/giveaway_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +5,6 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:flutter_assiment/providers/giveaway_provider.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
-
-
-
 
 class MealScreen extends ConsumerStatefulWidget {
   const MealScreen({super.key});
@@ -21,59 +17,56 @@ class _MealScreenState extends ConsumerState<MealScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:buildAppbar() ,
+      appBar: buildAppbar(),
       body: buildBody(),
       floatingActionButton: _showButton ? _buildFloating() : null,
     );
   }
 
-
-
-
   bool _showButton = false;
 
-@override
-void initState() {
-  super.initState();
-  _scroller.addListener(() {
-    if (_scroller.position.pixels < 500) {
-      setState(() {
-        _showButton = false;
-      });
-    } else {
-      setState(() {
-        _showButton = true;
-      });
-    }
-  });
-}
+  @override
+  void initState() {
+    super.initState();
+    _scroller.addListener(() {
+      if (_scroller.position.pixels < 500) {
+        setState(() {
+          _showButton = false;
+        });
+      } else {
+        setState(() {
+          _showButton = true;
+        });
+      }
+    });
+  }
 
   AppBar buildAppbar() {
     return AppBar(
-        centerTitle: true,
-        title: Text("Meal Menu"),
-        backgroundColor: Colors.pink,
-         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(20.0),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Well, it is cool, right?",
-              style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold),
-            ),
+      centerTitle: true,
+      title: Text("Giveaway"),
+      // backgroundColor: Colors.pink,
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(20.0),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "Well, it is cool, right?",
+            style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
           ),
         ),
-
+      ),
     );
   }
+
   Widget buildBody() {
-    final mealAsync = ref.watch(mealNotifierProvider);
+    final giveawayAsync = ref.watch(giveawayNotifierProvider);
     return Center(
       child: RefreshIndicator(
         onRefresh: () async {
-          ref.watch(mealNotifierProvider.notifier).refreshMeals();
+          ref.watch(giveawayNotifierProvider.notifier).refreshGiveaways();
         },
-        child: mealAsync.when(
+        child: giveawayAsync.when(
           data: (items) {
             return _buildGridView(items);
           },
@@ -90,63 +83,58 @@ void initState() {
     );
   }
 
-
   Widget _buildFloating() {
-  return FloatingActionButton(
-    shape: const CircleBorder(),
-    onPressed: () {
-      _scroller.animateTo(
-        0,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    },
-    child: const Icon(Icons.arrow_upward),
-  );
-}
+    return FloatingActionButton(
+      shape: const CircleBorder(),
+      onPressed: () {
+        _scroller.animateTo(
+          0,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      },
+      child: const Icon(Icons.arrow_upward),
+    );
+  }
 
-
-Widget _buildSkeleton() {
-  return Skeletonizer(
-    child: GridView.builder(
-      itemCount: 40,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 2 / 3,
-      ),
-      itemBuilder: (context, index) {
-        return Card(
-          child: Column(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Container(
-                      color: Colors.grey.shade400,
+  Widget _buildSkeleton() {
+    return Skeletonizer(
+      child: GridView.builder(
+        itemCount: 40,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 2 / 3,
+        ),
+        itemBuilder: (context, index) {
+          return Card(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(color: Colors.grey.shade400),
                     ),
                   ),
                 ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  "asdsadasd sadassa",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "asdsadasd sadassa",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
-    ),
-  );
-}
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
 
-final ScrollController _scroller = ScrollController();
-
+  final ScrollController _scroller = ScrollController();
 
   Widget _buildGridView(List<GiveawayModel> items) {
     if (items.isEmpty) {
@@ -169,33 +157,33 @@ final ScrollController _scroller = ScrollController();
 
   Widget _buildItem(GiveawayModel item) {
     return InkWell(
-      onTap: (){
-        Navigator.of(context).pushNamed("/detail",arguments: item.id);
+      onTap: () {
+        Navigator.of(context).pushNamed("/detail", arguments: item.id);
       },
-   
-    child:Card(
-      child: Column(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ClipRRect(
-                borderRadius: .circular(8),
-                child: CachedNetworkImage(
-                  imageUrl: item.image,
-                  fit: BoxFit.cover,
-                  width: double.maxFinite,
+
+      child: Card(
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: .circular(8),
+                  child: CachedNetworkImage(
+                    imageUrl: item.image,
+                    fit: BoxFit.cover,
+                    width: double.maxFinite,
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(item.title, maxLines: 1, overflow: .ellipsis),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(item.title, maxLines: 1, overflow: .ellipsis),
+            ),
+          ],
+        ),
       ),
-    ),
     );
   }
 }

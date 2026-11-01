@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class GiveawayService {
   final _baseUrl = 'https://www.gamerpower.com/api';
 
-  Future<List<GiveawayModel>> fetchMeals() async {
+  Future<List<GiveawayModel>> fetchGieaWay() async {
     final url = "$_baseUrl/giveaways";
 
     try {

@@ -26,17 +26,7 @@ class _MainScreenState extends State<MainScreen> {
             inactiveForegroundColor: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
-        PersistentTabConfig(
-          screen: Container(color: Colors.lime),
-          item: ItemConfig(
-            icon: const Icon(Icons.message),
-            title: 'Messages',
-            activeForegroundColor: Theme.of(
-              context,
-            ).colorScheme.onSecondaryContainer,
-            inactiveForegroundColor: Theme.of(context).colorScheme.onPrimary,
-          ),
-        ),
+        
         PersistentTabConfig(
           screen: const SettingScreen(),
           item: ItemConfig(
